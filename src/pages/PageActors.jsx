@@ -1,7 +1,7 @@
 import React from 'react';
 
-const PageActors = () => {
+const Cast = () => {
   return <div>HomePage</div>;
 };
 
-export default PageActors;
+export default Cast;

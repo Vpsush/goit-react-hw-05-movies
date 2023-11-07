@@ -1,38 +1,40 @@
 import { NavLink, Route, Routes } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import MoviesPage from './pages/MoviesPage';
-import MoviesPageDetails from './pages/MoviesPageDetails';
-import PageActors from './pages/PageActors';
-import PageReviews from './pages/PageRewies';
+import Home from 'pages/HomePage';
+import Movies from 'pages/MoviesPage';
+import MoviesPageDetails from 'pages/MoviesPageDetails';
+import Cast from './pages/PageActors';
+import Reviews from './pages/PageRewies';
+import { StyledMovies } from './Movies.styled';
 
 export const App = () => {
   return (
-    <div>
-      <header>
-        <NavLink to="/">Home</NavLink>
-        <NavLink to="/movies">Movies</NavLink>
-        <NavLink to="/movies/get-movie-details">Movies details</NavLink>
-        <NavLink to="/movies/get-movie-credits">Movies actors</NavLink>
-        <NavLink to="/movies/get-movie-reviews">Movies reviews</NavLink>
-      </header>
-      <main>
-        <Routes>
-          <Route path="/" element={<HomePage />}></Route>
-          <Route path="/movies" element={<MoviesPage />}></Route>
-          <Route
-            path="/movies/get-movie-details"
-            element={<MoviesPageDetails />}
-          ></Route>
-          <Route
-            path="/movies/get-movie-credits"
-            element={<PageActors />}
-          ></Route>
-          <Route
-            path="/movies/get-movie-reviews"
-            element={<PageReviews />}
-          ></Route>
-        </Routes>
-      </main>
-    </div>
+    <StyledMovies>
+      <div>
+        <ul className="title">
+          <li>
+            <NavLink to="/">Home</NavLink>
+          </li>
+          <li>
+            <NavLink to="/movies">Movies</NavLink>
+          </li>
+          {/* <NavLink to="/movies/:movieId">Movies details</NavLink>
+        <NavLink to="/movies/:movieId/cast">Cast</NavLink>
+        <NavLink to="/movies/:movieId/reviews">Reviews</NavLink> */}
+        </ul>
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />}></Route>
+            <Route path="/movies" element={<Movies />}>
+              <Route path=":movieId/cast" element={<Cast />}></Route>
+              <Route path=":movieId/reviews" element={<Reviews />}></Route>
+            </Route>
+            <Route
+              path="/movies/:movieId"
+              element={<MoviesPageDetails />}
+            ></Route>
+          </Routes>
+        </main>
+      </div>
+    </StyledMovies>
   );
 };

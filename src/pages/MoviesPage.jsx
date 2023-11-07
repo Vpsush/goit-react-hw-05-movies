@@ -121,7 +121,7 @@
 
 import { Link } from 'react-router-dom';
 import { StyledMovies } from '../components/Movies.styled';
-import { useParams, useEffect } from 'react';
+// import { useParams, useEffect } from 'react';
 import SearchForm from '../components/SearchForm';
 
 export default function Movies() {

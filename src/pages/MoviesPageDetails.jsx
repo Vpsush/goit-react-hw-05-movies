@@ -1,6 +1,6 @@
 // import React from 'react';
-import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+// import { useParams } from 'react-router-dom';
+// import { useEffect } from 'react';
 
 // const MoviesPageDetails = () => {
 //   const { movieId } = useParams();

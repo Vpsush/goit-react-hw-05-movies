@@ -74,4 +74,7 @@ export const StyledMovies = styled.div`
     padding-left: 4px;
     padding-right: 4px;
   }
+  .loader {
+    justify-content: center;
+  }
 `;

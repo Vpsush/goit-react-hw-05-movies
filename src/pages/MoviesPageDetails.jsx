@@ -1,65 +1,68 @@
-// import React from 'react';
-// import { useParams } from 'react-router-dom';
-// import { useEffect } from 'react';
-
-// const MoviesPageDetails = () => {
-//   const { movieId } = useParams();
-//   useEffect(() => {
-//     if (!movieId) return;
-//   }, [movieId]);
-
-//   return <div></div>;
-// };
-
-// export default MoviesPageDetails;
-
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { NavLink, Route, Routes } from 'react-router-dom';
+import Loader from '../components/Loader/Loader';
+import PageActors from './PageActors';
+import PageRewies from './PageRewies';
 
-const API_KEY = 'c22cf15536964c1cf38cb65c76fb41a1';
+// const API_KEY = 'c22cf15536964c1cf38cb65c76fb41a1';
 axios.defaults.baseURL = 'https://api.themoviedb.org/3/';
 
-export default class MoviesPageDetails extends Component {
-  state = {
-    movies: [],
-    isLoading: false,
-    error: null,
-  };
+const MoviesPageDetails = () => {
+  const { movieId } = useParams();
+  const { movieDetails, setMovieDetails } = useState('null');
+  const { isLoading, setIsLoading } = useState('false');
+  const [error, setError] = useState(null);
 
-  componentDidMount() {
-    this.fetchMovies();
-  }
+  useEffect(() => {
+    const fetchMovieDetails = async () => {
+      try {
+        setIsLoading(true);
+        const { data } = await axios.get(
+          `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`
+        );
+        setMovieDetails(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  fetchMovies = async movieId => {
-    try {
-      this.setState({ isLoading: true });
-      const { data } = await axios.get(
-        `movie/movie_id=${movieId}?language=en-US&api_key=${API_KEY}`
-      );
-      this.setState({ movies: data.results });
-    } catch (error) {
-      this.setState({ error: error.message });
-    } finally {
-      this.setState({ isLoading: false });
-    }
-  };
-
-  render() {
-    const { movies, isLoading, error } = this.state;
-
-    return (
+    fetchMovieDetails();
+  }, [movieId, setIsLoading, setMovieDetails]);
+  return (
+    <div>
+      <h1>Movie Details</h1>
+      {error !== null && <p className="error-bage">{error}</p>}
+      {isLoading && <Loader />}
+      {movieDetails !== null && (
+        <div>
+          {movieDetails.original_title}
+          Rating: {Math.round(movieDetails.vote_average)}
+          Overview
+          {movieDetails.overview}
+          Genres
+          {movieDetails.genres?.map(genre => (
+            <li key={genre.id}>{genre.name}</li>
+          ))}
+        </div>
+      )}
       <div>
-        <h1>Trending today</h1>
-        {isLoading && <p>Loading...</p>}
-        {error && <p>Error: {error}</p>}
-        {movies && (
-          <ul>
-            {movies.map(movie => (
-              <li key={movie.id}>{movie.original_title}</li>
-            ))}
-          </ul>
-        )}
+        <h3>Additional information</h3>
+        <NavLink className="header-link" to=":movieId/cast">
+          Cast
+        </NavLink>
+        <NavLink className="header-link" to=":movieId/reviews">
+          Cast
+        </NavLink>
       </div>
-    );
-  }
-}
+      <Routes>
+        <Route path=":movieId/cast" element={<PageActors />} />
+        <Route path=":movieId/reviews" element={<PageRewies />} />
+      </Routes>
+    </div>
+  );
+};
+export default MoviesPageDetails;

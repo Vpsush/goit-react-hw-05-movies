@@ -30,7 +30,7 @@ const SearchForm = ({ handleSearch }) => {
         <input
           className="SearchFormInput"
           type="text"
-          placeholder="Search images and photos"
+          placeholder="Search movies"
           onChange={handleChange}
           value={query}
         />

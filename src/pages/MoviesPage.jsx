@@ -120,7 +120,7 @@
 // }
 
 import { Link } from 'react-router-dom';
-import { StyledMovies } from '../components/Movies.styled';
+import { StyledMovies } from '../Movies.styled';
 // import { useParams, useEffect } from 'react';
 import SearchForm from '../components/SearchForm';
 

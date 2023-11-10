@@ -119,7 +119,7 @@
 //   }
 // }
 
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { StyledMovies } from '../Movies.styled';
 // import { useParams, useEffect } from 'react';
 import SearchForm from '../components/SearchForm';

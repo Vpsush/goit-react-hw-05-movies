@@ -136,7 +136,7 @@ export default function Movies() {
         <div>
           <SearchForm />
         </div>
-        <h3>Additional information</h3>
+        {/* <h3>Additional information</h3>
         <ul>
           <li>
             <Link to=":movieId/cast">Cast</Link>
@@ -144,7 +144,7 @@ export default function Movies() {
           <li>
             <Link to=":movieId/reviews">Reviews</Link>
           </li>
-        </ul>
+        </ul> */}
       </main>
     </StyledMovies>
   );

@@ -61,12 +61,12 @@ export const App = () => {
         </ul>
         <main>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/movies" element={<Movies />}>
-              <Route path=":movieId/cast" element={<Cast />} />
-              <Route path=":movieId/reviews" element={<Reviews />} />
+            <Route path="/" element={<Home />}></Route>
+            <Route path="/movies" element={<Movies />}></Route>
+            <Route path="/movies/:movieId" element={<MoviesPageDetails />}>
+              <Route path="/movies/:movieId/cast" element={<Cast />} />
+              <Route path="/movies/:movieId/reviews" element={<Reviews />} />
             </Route>
-            <Route path="/movies/:movieId" element={<MoviesPageDetails />} />
           </Routes>
         </main>
       </div>

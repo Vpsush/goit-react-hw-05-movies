@@ -1,151 +1,90 @@
-// import React, { Component } from 'react';
-// import axios from 'axios';
-// import { StyledMovies } from '../Movies.styled';
-// import { Link } from 'react-router-dom';
-
-// const API_KEY = 'c22cf15536964c1cf38cb65c76fb41a1';
-// axios.defaults.baseURL = 'https://api.themoviedb.org/';
-
-// export default class Movies extends Component {
-//   state = {
-//     movies: null,
-//     reviews: null,
-//     moviesId: null,
-//     isLoading: false,
-//     error: null,
-//   };
-
-//   fetchMovies = async () => {
-//     try {
-//       this.setState({ isLoading: true });
-//       const { data } = await axios.get(`&key=${API_KEY}`);
-//       this.setState({ movies: data });
-//     } catch (error) {
-//       this.setState({ error: error.message });
-//     } finally {
-//       this.setState({ isLoading: false });
-//     }
-//   };
-
-//   fetchMoviesDetails = async () => {
-//     try {
-//       this.setState({
-//         isLoading: true,
-//       });
-//       const { data } = await axios.get(
-//         `https://jsonplaceholder.typicode.com/comments?postId=${this.state.moviesId}`
-//       );
-
-//       this.setState({
-//         details: data,
-//       });
-//     } catch (error) {
-//       this.setState({ error: error.message });
-//     } finally {
-//       this.setState({
-//         isLoading: false,
-//       });
-//     }
-//   };
-
-//   onSelectMoviesId = moviesId => {
-//     this.setState({
-//       selectedMoviesId: moviesId,
-//     });
-//   };
-
-//   componentDidMount() {
-//     this.fetchMovies();
-//   }
-
-//   componentDidUpdate(_, prevState) {
-//     if (prevState.selectedMoviesId !== this.state.selectedMoviesId) {
-//       this.fetchMoviesDetails();
-//     }
-//   }
-
-//   render() {
-//     return (
-//       <StyledMovies>
-//         <h1>MoviesPage</h1>
-//         {this.state.error !== null && (
-//           <p className="error">
-//             Oops, some goes wrong... Error message: {this.state.error}
-//           </p>
-//         )}
-//         {/* {this.state.isLoading && <Loader />} */}
-//         <div className="listWrapper">
-//           <ul className="moviesList">
-//             {this.state.posts !== null &&
-//               this.state.posts.map(movie => {
-//                 return (
-//                   <li
-//                     key={movie.id}
-//                     // onClick={() => this.onSelecPostId(post.id)}
-//                     className="movieListItem"
-//                   >
-//                     <Link to={`/posts/${movie.id}`}>
-//                       <h2 className="itemTitle">{movie.title}</h2>
-//                       <p className="itemBody">
-//                         <b>Body:</b> {movie.body}
-//                       </p>
-//                     </Link>
-//                   </li>
-//                 );
-//               })}
-//           </ul>
-//           <ul className="commentsList">
-//             {this.state.selectedPostId !== null && (
-//               <li className="commentsListItem">
-//                 Selected post id: {this.state.selectedPostId}
-//               </li>
-//             )}
-//             {this.state.comments !== null &&
-//               this.state.comments.map(comment => {
-//                 return (
-//                   <li key={comment.id} className="commentsListItem">
-//                     <h2 className="commentTitle">Name: {comment.name}</h2>
-//                     <h3 className="commentEmail">Email: {comment.email}</h3>
-//                     <p className="commentBody">
-//                       <b>Body:</b> {comment.body}
-//                     </p>
-//                   </li>
-//                 );
-//               })}
-//           </ul>
-//         </div>
-//       </StyledMovies>
-//     );
-//   }
-// }
-
-// import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import {
+  useSearchParams,
+  Link,
+  Route,
+  Routes,
+  useLocation,
+} from 'react-router-dom';
 import { StyledMovies } from '../Movies.styled';
-// import { useParams, useEffect } from 'react';
-import SearchForm from '../components/SearchForm';
+import Loader from '../components/Loader/Loader';
+import Cast from 'pages/Cast';
+import Reviews from 'pages/Reviews';
 
-export default function Movies() {
-  // const { movieId } = useParams();
-  // useEffect(() => {
-  //   if (!movieId) return;
-  // }, [movieId]);
+const API_KEY = 'c22cf15536964c1cf38cb65c76fb41a1';
+
+const Movies = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [movieDetails, setMovieDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const location = useLocation();
+  console.log(location);
+
+  const queryValue = searchParams.get('query');
+
+  const onFormSubmit = e => {
+    e.preventDefault();
+    const value = e.currentTarget.elements.searchKey.value;
+    setSearchParams({ query: value });
+  };
+
+  useEffect(() => {
+    if (!queryValue) return;
+    const fetchSearchMovies = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        const { data } = await axios.get(
+          `https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US&page=1&query=${queryValue}&api_key=${API_KEY}`
+        );
+
+        setMovieDetails(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchSearchMovies();
+  }, [queryValue]);
 
   return (
     <StyledMovies>
-      <main>
+      <form className="SearchForm" onSubmit={onFormSubmit}>
+        <label>
+          <input
+            // className="SearchFormInput"
+            type="text"
+            required
+            placeholder="Search movies"
+            name="searchKey"
+          />
+        </label>
+        <button type="submit" className="SearchFormButton"></button>
+      </form>
+      {isLoading && <Loader />}
+      {error && <p className="error">Error: {error}</p>}
+      {movieDetails && (
         <div>
-          <SearchForm />
+          <h1>Search Results</h1>
+          <ul>
+            {movieDetails.results.map(movie => (
+              <li key={movie.id}>
+                <Link to={`/movies/${movie.id}`}>{movie.original_title}</Link>
+              </li>
+            ))}
+          </ul>
+          <Routes>
+            <Route path="cast" element={<Cast />} />
+            <Route path="reviews" element={<Reviews />} />
+          </Routes>
         </div>
-        {/* <h3>Additional information</h3>
-        <ul>
-          <li>
-            <Link to=":movieId/cast">Cast</Link>
-          </li>
-          <li>
-            <Link to=":movieId/reviews">Reviews</Link>
-          </li>
-        </ul> */}
-      </main>
+      )}
     </StyledMovies>
   );
-}
+};
+
+export default Movies;

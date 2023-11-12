@@ -1,26 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { NavLink } from 'react-router-dom';
 import Loader from '../components/Loader/Loader';
-// import PageActors from './PageActors';
-// import PageRewies from './PageRewies';
+import Navigation from '../components/Navigation/Navigation';
 
-// const API_KEY = 'c22cf15536964c1cf38cb65c76fb41a1';
+const API_KEY = 'c22cf15536964c1cf38cb65c76fb41a1';
 axios.defaults.baseURL = 'https://api.themoviedb.org/3/';
 
 const MoviesPageDetails = () => {
   const { movieId } = useParams();
-  const { movieDetails, setMovieDetails } = useState('null');
-  const { isLoading, setIsLoading } = useState('false');
+  const [movieDetails, setMovieDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchMovieDetails = async id => {
+    const fetchMovieDetails = async () => {
       try {
         setIsLoading(true);
         const { data } = await axios.get(
-          `https://api.themoviedb.org/3/movie/${id}?language=en-US`
+          `movie/${movieId}?language=en-US&api_key=${API_KEY}`
         );
         setMovieDetails(data);
       } catch (error) {
@@ -35,41 +33,33 @@ const MoviesPageDetails = () => {
 
   return (
     <div>
-      <h1>Movie Details</h1>
       {error !== null && <p className="error-bage">{error}</p>}
       {isLoading && <Loader />}
       {movieDetails !== null && (
-        <div>
-          <img
-            src={`https://image.tmdb.org/t/p/w200/${movieDetails.poster_path}`}
-            alt={movieDetails.title}
-          />
-          <h2>{movieDetails.title}</h2>
-          <p>Rating: {Math.round(movieDetails.vote_average)}</p>
-          <h2>Overview</h2>
-          <p>{movieDetails.overview}</p>
-          <h2>Genres</h2>
-          <p>
-            {movieDetails.genres?.map(genre => (
-              <li key={genre.id}>{genre.name}</li>
-            ))}
-          </p>
+        <div className="info">
+          <div>
+            <img
+              src={`https://image.tmdb.org/t/p/w200/${movieDetails.poster_path}`}
+              alt={movieDetails.title}
+            />
+          </div>
+          <div>
+            <h2>{movieDetails.title}</h2>
+            <p>Rating: {Math.round(movieDetails.vote_average)}</p>
+            <h2>Overview</h2>
+            <p>{movieDetails.overview}</p>
+            <h2>Genres</h2>
+            <p>
+              {movieDetails.genres?.map(genre => (
+                <li key={genre.id}>{genre.name}</li>
+              ))}
+            </p>
+          </div>
         </div>
       )}
-      <div>
-        <h3>Additional information</h3>
-        <NavLink className="header-link" to={`/movies/${movieId}/cast`}>
-          Cast
-        </NavLink>
-        <NavLink className="header-link" to={`/movies/${movieId}/reviews`}>
-          Reviews
-        </NavLink>
-      </div>
-      {/* <Routes>
-        <Route path=":movieId/cast" element={<PageActors />} />
-        <Route path=":movieId/reviews" element={<PageRewies />} />
-      </Routes> */}
+      <Navigation />
     </div>
   );
 };
+
 export default MoviesPageDetails;

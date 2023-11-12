@@ -39,18 +39,18 @@
 //   );
 // };
 
-import { NavLink, Route, Routes } from 'react-router-dom';
+import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
 import Home from 'pages/HomePage';
 import Movies from 'pages/MoviesPage';
 import MoviesPageDetails from 'pages/MoviesPageDetails';
-import Cast from 'pages/PageActors';
-import Reviews from 'pages/PageRewies';
+import Cast from 'pages/Cast';
+import Reviews from 'pages/Reviews';
 import { StyledMovies } from '../Movies.styled';
 
 export const App = () => {
   return (
     <StyledMovies>
-      <div>
+      <div className="header">
         <ul className="title">
           <li>
             <NavLink to="/">Home</NavLink>
@@ -67,6 +67,7 @@ export const App = () => {
               <Route path="/movies/:movieId/cast" element={<Cast />} />
               <Route path="/movies/:movieId/reviews" element={<Reviews />} />
             </Route>
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
       </div>

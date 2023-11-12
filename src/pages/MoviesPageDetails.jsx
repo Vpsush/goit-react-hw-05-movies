@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams, Link } from 'react-router-dom';
 import Loader from '../components/Loader/Loader';
 import Navigation from '../components/Navigation/Navigation';
 
@@ -12,6 +12,9 @@ const MoviesPageDetails = () => {
   const [movieDetails, setMovieDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const location = useLocation();
+  console.log('from', location);
+  const backLinkRef = useRef(location.state?.from ?? '/');
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -33,6 +36,7 @@ const MoviesPageDetails = () => {
 
   return (
     <div>
+      <Link to={backLinkRef.current}>Go back</Link>
       {error !== null && <p className="error-bage">{error}</p>}
       {isLoading && <Loader />}
       {movieDetails !== null && (

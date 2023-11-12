@@ -73,7 +73,9 @@ const Movies = () => {
           <ul>
             {movieDetails.results.map(movie => (
               <li key={movie.id}>
-                <Link to={`/movies/${movie.id}`}>{movie.original_title}</Link>
+                <Link state={{ form: location }} to={`/movies/${movie.id}`}>
+                  {movie.original_title}
+                </Link>
               </li>
             ))}
           </ul>

@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import {
-  useSearchParams,
-  Link,
-  Route,
-  Routes,
-  useLocation,
-} from 'react-router-dom';
+import { useSearchParams, Link, useLocation } from 'react-router-dom';
 import { StyledMovies } from '../Movies.styled';
 import Loader from '../components/Loader/Loader';
-import Cast from 'pages/Cast';
-import Reviews from 'pages/Reviews';
+// import Cast from 'pages/Cast';
+// import Reviews from 'pages/Reviews';
 import { API_KEY } from '../additional/const';
 
 // const API_KEY = 'c22cf15536964c1cf38cb65c76fb41a1';

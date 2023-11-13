@@ -1,17 +1,12 @@
 import { lazy, Suspense } from 'react';
 import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
-// import Home from 'pages/HomePage';
-// import Movies from 'pages/MoviesPage';
-// import MoviesPageDetails from 'pages/MoviesPageDetails';
-// import Cast from 'pages/Cast';
-// import Reviews from 'pages/Reviews';
 import { StyledMovies } from '../Movies.styled';
 import Loader from './Loader/Loader';
 
 const Home = lazy(() => import('pages/HomePage'));
 const Movies = lazy(() => import('pages/MoviesPage'));
-const Reviews = lazy(() => import('pages/Reviews'));
-const Cast = lazy(() => import('pages/Cast'));
+const Reviews = lazy(() => import('./Reviews/Reviews'));
+const Cast = lazy(() => import('./Cast/Cast'));
 const MoviesPageDetails = lazy(() => import('pages/MoviesPageDetails'));
 
 export const App = () => {

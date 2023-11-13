@@ -1,7 +1,7 @@
 import { StyledMovies } from '../../Movies.styled';
 import { NavLink, Route, Routes, useParams } from 'react-router-dom';
-import Cast from 'pages/Cast';
-import Reviews from 'pages/Reviews';
+import Cast from '../Cast/Cast';
+import Reviews from '../Reviews/Reviews';
 
 const Navigation = () => {
   const { movieId } = useParams();

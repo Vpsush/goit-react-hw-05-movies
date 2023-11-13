@@ -11,8 +11,9 @@ import { StyledMovies } from '../Movies.styled';
 import Loader from '../components/Loader/Loader';
 import Cast from 'pages/Cast';
 import Reviews from 'pages/Reviews';
+import { API_KEY } from '../additional/const';
 
-const API_KEY = 'c22cf15536964c1cf38cb65c76fb41a1';
+// const API_KEY = 'c22cf15536964c1cf38cb65c76fb41a1';
 
 const Movies = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -56,7 +57,6 @@ const Movies = () => {
       <form className="SearchForm" onSubmit={onFormSubmit}>
         <label>
           <input
-            // className="SearchFormInput"
             type="text"
             required
             placeholder="Search movies"
@@ -79,10 +79,10 @@ const Movies = () => {
               </li>
             ))}
           </ul>
-          <Routes>
+          {/* <Routes>
             <Route path="cast" element={<Cast />} />
             <Route path="reviews" element={<Reviews />} />
-          </Routes>
+          </Routes> */}
         </div>
       )}
     </StyledMovies>

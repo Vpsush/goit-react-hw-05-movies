@@ -3,9 +3,10 @@ import axios from 'axios';
 import { useLocation, useParams, Link } from 'react-router-dom';
 import Loader from '../components/Loader/Loader';
 import Navigation from '../components/Navigation/Navigation';
-
-const API_KEY = 'c22cf15536964c1cf38cb65c76fb41a1';
-axios.defaults.baseURL = 'https://api.themoviedb.org/3/';
+import { API_KEY, BASE_URL } from '../additional/const';
+import { defaultImg } from '../additional/const';
+// const API_KEY = 'c22cf15536964c1cf38cb65c76fb41a1';
+// axios.defaults.baseURL = 'https://api.themoviedb.org/3/';
 
 const MoviesPageDetails = () => {
   const { movieId } = useParams();
@@ -21,7 +22,7 @@ const MoviesPageDetails = () => {
       try {
         setIsLoading(true);
         const { data } = await axios.get(
-          `movie/${movieId}?language=en-US&api_key=${API_KEY}`
+          `${BASE_URL}/movie/${movieId}?language=en-US&api_key=${API_KEY}`
         );
         setMovieDetails(data);
       } catch (error) {
@@ -43,7 +44,11 @@ const MoviesPageDetails = () => {
         <div className="info">
           <div>
             <img
-              src={`https://image.tmdb.org/t/p/w200/${movieDetails.poster_path}`}
+              src={
+                movieDetails.poster_path
+                  ? `https://image.tmdb.org/t/p/w200/${movieDetails.poster_path}`
+                  : defaultImg
+              }
               alt={movieDetails.title}
             />
           </div>

@@ -1,4 +1,4 @@
-import MoviestList from 'components/MoviesList';
+import MoviesList from '';
 import React from 'react';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import MoviesPageDetails from './MoviesPageDetails';
@@ -8,7 +8,7 @@ const Home = () => {
     <div>
       <div>
         <NavLink to="movies/:movieId">
-          <MoviestList />
+          <MoviesList />
         </NavLink>
       </div>
       <Routes>

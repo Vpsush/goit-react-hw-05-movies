@@ -1,8 +1,10 @@
 // import React, { Component } from 'react';
 // import axios from 'axios';
-// import { Link } from 'react-router-dom';
 
-// export default class MoviesList extends Component {
+// const API_KEY = 'c22cf15536964c1cf38cb65c76fb41a1';
+// axios.defaults.baseURL = 'https://api.themoviedb.org/3/';
+
+// export default class MoviestList extends Component {
 //   state = {
 //     movies: [],
 //     isLoading: false,
@@ -32,15 +34,13 @@
 
 //     return (
 //       <div>
-//         <h1 className="titleToday">Trending today</h1>
+//         <h1>Trending today</h1>
 //         {isLoading && <p>Loading...</p>}
 //         {error && <p>Error: {error}</p>}
 //         {movies && (
 //           <ul>
 //             {movies.map(movie => (
-//               <li key={movie.id}>
-//                 <Link to={`/movies/${movie.id}`}>{movie.original_title}</Link>
-//               </li>
+//               <li key={movie.id}>{movie.original_title}</li>
 //             ))}
 //           </ul>
 //         )}
@@ -49,50 +49,42 @@
 //   }
 // }
 
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+// import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import { API_KEY } from 'additional/const';
+import { fetchDayMovies } from 'additional/function'; // Assuming this path is correct
+// import { BASE_URL, API_KEY } from 'additional/const';
 
-const MoviesList = () => {
-  // state = {
-  //   movies: [],
-  //   isLoading: false,
-  //   error: null,
-  // };
-  const { movieId } = useParams();
+const MoviestList = () => {
+  const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [movie, setMovie] = useState(null);
 
-  // componentDidMount() {
-  //   this.fetchMovies();
-  // }
   useEffect(() => {
-    const fetchMovies = async () => {
+    const fetchData = async () => {
       try {
-        const { data } = await axios.get(
-          `trending/movie/day?language=en-US&api_key=${API_KEY}`
-        );
-        setMovie(data.movies);
+        setIsLoading(true);
+        setError(null); // Reset error on each fetch
+        const data = await fetchDayMovies(); // Use the function from fetchFunctions.js
+        setMovies(data.results);
       } catch (error) {
         setError(error.message);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchMovies();
-  }, [movieId]);
+
+    fetchData();
+  }, []); // Empty dependency array to ensure it runs only once on mount
 
   return (
     <div>
       <h1 className="titleToday">Trending today</h1>
       {isLoading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
-      {movie && (
+      {movies && (
         <ul>
-          {movie.map(movie => (
+          {movies.map(movie => (
             <li key={movie.id}>
               <Link to={`/movies/${movie.id}`}>{movie.original_title}</Link>
             </li>
@@ -103,4 +95,4 @@ const MoviesList = () => {
   );
 };
 
-export default MoviesList;
+export default MoviestList;

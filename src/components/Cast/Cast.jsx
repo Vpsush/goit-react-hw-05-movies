@@ -50,31 +50,41 @@
 // export default Cast;
 
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { API_KEY, BASE_URL } from 'additional/const';
+// import { API_KEY, BASE_URL } from 'additional/const';
+import { fetchActors } from 'additional/function';
+import { defaultImg } from 'additional/const';
 
 const Cast = () => {
   const { movieId } = useParams();
   const [actors, setActors] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error] = useState(null);
+
+  // useEffect(() => {
+  //   const findActors = async () => {
+  //     try {
+  //       const { data } = await axios.get(
+  //         `${BASE_URL}movie/${movieId}/credits?api_key=${API_KEY}`
+  //       );
+  //       setActors(data.cast);
+
+  //     } catch (error) {
+  //       setError(error.message);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   findActors();
+  // }, [movieId]);
 
   useEffect(() => {
-    const fetchActors = async () => {
-      try {
-        const { data } = await axios.get(
-          `${BASE_URL}movie/${movieId}/credits?api_key=${API_KEY}`
-        );
-        setActors(data.cast);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchActors();
+    fetchActors(movieId).then(({ cast }) => {
+      setActors(cast);
+      setIsLoading(false);
+    });
   }, [movieId]);
 
   return (
@@ -83,14 +93,18 @@ const Cast = () => {
 
       {isLoading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
-      {actors.map(actor => (
-        <div key={actor.id}>
+      {actors.map(({ profile_path, id, name, character }) => (
+        <div key={id}>
           <img
-            src={`https://image.tmdb.org/t/p/w200/${actor.profile_path}`}
-            alt={`${actor.name} portrait`}
+            src={
+              profile_path
+                ? `https://image.tmdb.org/t/p/w200/${profile_path}`
+                : defaultImg
+            }
+            alt={`${name} portrait`}
           />
-          <p>{actor.name}</p>
-          <p>Character: {actor.character}</p>
+          <p>{name}</p>
+          <p>Character: {character}</p>
         </div>
       ))}
     </div>

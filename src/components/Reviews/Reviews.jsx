@@ -1,29 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { API_KEY, BASE_URL } from 'additional/const';
+// import { API_KEY, BASE_URL } from 'additional/const';
+import { fetchReview } from 'additional/function';
 
 const Reviews = () => {
   const { movieId } = useParams();
   const [reviews, setReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error] = useState(null);
+
+  // useEffect(() => {
+  //   const fetchReviews = async () => {
+  //     try {
+  //       const { data } = await axios.get(
+  //         `${BASE_URL}/movie/${movieId}/reviews?api_key=${API_KEY}`
+  //       );
+  //       setReviews(data.results);
+  //     } catch (error) {
+  //       setError(error.message);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchReviews();
+  // }, [movieId]);
 
   useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const { data } = await axios.get(
-          `${BASE_URL}/movie/${movieId}/reviews?api_key=${API_KEY}`
-        );
-        setReviews(data.results);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchReviews();
+    fetchReview(movieId).then(({ review }) => {
+      setReviews(review);
+      setIsLoading(false);
+    });
   }, [movieId]);
 
   return reviews.length === 0 ? (

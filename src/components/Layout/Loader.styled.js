@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const StyledApp = styled.div`
+export const StyledLayout = styled.div`
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
@@ -17,8 +17,8 @@ export const StyledApp = styled.div`
     list-style: none;
     box-shadow: 10px 5px 5px grey;
 
-    &.active {
-      color: orangered;
+    &.hover .focus {
+      color: orange;
     }
   }
 `;

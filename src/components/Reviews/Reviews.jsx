@@ -1,37 +1,23 @@
 import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
 import { useParams } from 'react-router-dom';
-// import { API_KEY, BASE_URL } from 'additional/const';
-import { fetchReview } from 'additional/function';
+import { fetchReview } from 'additional/function'; // Assuming the correct function is fetchReview
 
 const Reviews = () => {
   const { movieId } = useParams();
   const [reviews, setReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error] = useState(null);
-
-  // useEffect(() => {
-  //   const fetchReviews = async () => {
-  //     try {
-  //       const { data } = await axios.get(
-  //         `${BASE_URL}/movie/${movieId}/reviews?api_key=${API_KEY}`
-  //       );
-  //       setReviews(data.results);
-  //     } catch (error) {
-  //       setError(error.message);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchReviews();
-  // }, [movieId]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchReview(movieId).then(({ review }) => {
-      setReviews(review);
-      setIsLoading(false);
-    });
+    fetchReview(movieId)
+      .then(({ results }) => {
+        setReviews(results);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        setError(error.message);
+        setIsLoading(false);
+      });
   }, [movieId]);
 
   return reviews.length === 0 ? (
@@ -39,12 +25,13 @@ const Reviews = () => {
   ) : (
     <div>
       <h2>Reviews</h2>
+
       {isLoading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
-      {reviews.map(review => (
-        <div key={review.id}>
-          <p>{review.author}</p>
-          <p>{review.content}</p>
+      {reviews.map(({ id, author, content }) => (
+        <div key={id}>
+          <p>{author}</p>
+          <p>{content}</p>
         </div>
       ))}
     </div>

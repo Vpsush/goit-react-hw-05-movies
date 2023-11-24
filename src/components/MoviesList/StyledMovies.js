@@ -8,5 +8,6 @@ export const StyledMovies = styled.div`
 
   .titleToday {
     text-decoration: none;
+    margin-left: 20px;
   }
 `;

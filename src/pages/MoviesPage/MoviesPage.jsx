@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useSearchParams, Link, useLocation } from 'react-router-dom';
-import { StyledMovies } from '../Movies.styled';
-import Loader from '../components/Loader/Loader';
-// import Cast from 'pages/Cast';
-// import Reviews from 'pages/Reviews';
-import { API_KEY } from '../additional/const';
-
-// const API_KEY = 'c22cf15536964c1cf38cb65c76fb41a1';
+import { StyledMoviesPage } from '../../pages/MoviesPage/MoviesPageStyled';
+import Loader from '../../components/Loader/Loader';
+import { searchMovie } from 'additional/function';
 
 const Movies = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -15,11 +10,10 @@ const Movies = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const location = useLocation();
-  console.log(location);
 
   const queryValue = searchParams.get('query');
 
-  const onFormSubmit = e => {
+  const onFormSubmit = async e => {
     e.preventDefault();
     const value = e.currentTarget.elements.searchKey.value;
     setSearchParams({ query: value });
@@ -27,15 +21,13 @@ const Movies = () => {
 
   useEffect(() => {
     if (!queryValue) return;
+
     const fetchSearchMovies = async () => {
       try {
         setIsLoading(true);
         setError(null);
 
-        const { data } = await axios.get(
-          `https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US&page=1&query=${queryValue}&api_key=${API_KEY}`
-        );
-
+        const data = await searchMovie(queryValue);
         setMovieDetails(data);
       } catch (error) {
         setError(error.message);
@@ -43,11 +35,12 @@ const Movies = () => {
         setIsLoading(false);
       }
     };
+
     fetchSearchMovies();
   }, [queryValue]);
 
   return (
-    <StyledMovies>
+    <StyledMoviesPage>
       <form className="SearchForm" onSubmit={onFormSubmit}>
         <label>
           <input
@@ -67,19 +60,15 @@ const Movies = () => {
           <ul>
             {movieDetails.results.map(movie => (
               <li key={movie.id}>
-                <Link state={{ form: location }} to={`/movies/${movie.id}`}>
+                <Link to={`/movies/${movie.id}`} state={{ from: location }}>
                   {movie.original_title}
                 </Link>
               </li>
             ))}
           </ul>
-          {/* <Routes>
-            <Route path="cast" element={<Cast />} />
-            <Route path="reviews" element={<Reviews />} />
-          </Routes> */}
         </div>
       )}
-    </StyledMovies>
+    </StyledMoviesPage>
   );
 };
 

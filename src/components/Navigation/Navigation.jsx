@@ -1,4 +1,3 @@
-import { StyledMovies } from '../../Movies.styled';
 import { NavLink, Route, Routes, useParams } from 'react-router-dom';
 import Cast from '../Cast/Cast';
 import Reviews from '../Reviews/Reviews';

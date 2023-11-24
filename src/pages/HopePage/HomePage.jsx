@@ -24,22 +24,11 @@ const Home = () => {
     getDayMovies();
   }, []);
 
-  // useEffect(() => {
-  //   fetchDayMovies('').then(({ movie }) => {
-  //     setMovie(movie);
-  //     setIsLoading(false);
-  //   });
-  // }, []);
-
-  // useEffect(() => {
-  //   fetchDayMovies('').then(setMovie);
-  // }, []);
-
   return (
     <div>
       <div>
         {isLoading && <Loader />}
-        {/* {error && <p>Error: {error}</p>} */}
+        {error && <p>Error: {error}</p>}
         <MoviesList movie={movie} />
       </div>
     </div>
